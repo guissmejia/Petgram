@@ -4,7 +4,7 @@
   "description": "This is the project of the advanced React.js course in Platzi",
   "main": "index.js",
   "scripts": {
-    "vercel-build":"npm run build",
+    "vercel-build": "npm run build",
     "build": "webpack",
     "dev": "webpack-dev-server"
   },
@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-icons": "^3.11.0",
+    "styled-components": "^5.2.0"
   }
 }
