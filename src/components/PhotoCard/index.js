@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ImgWrapper, Img, Button, Article } from './styles';
-import { MdFavoriteBorder } from 'react-icons/md';
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 
 const DEFAULT_IMAGE =
   'https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60';
@@ -8,6 +8,15 @@ const DEFAULT_IMAGE =
 export const PhotoCard = ({ id, likes = 0, src = DEFAULT_IMAGE }) => {
   const element = useRef(null);
   const [show, setShow] = useState(false);
+  const key = `like-${id}`
+  const [liked, setLiked] = useState(() => {
+    try{
+      const like = localStorage.getItem(key)
+      return like
+    } catch(e){
+      return false
+    }
+  });
 
   useEffect(() => {
     Promise.resolve(
@@ -18,7 +27,6 @@ export const PhotoCard = ({ id, likes = 0, src = DEFAULT_IMAGE }) => {
       const observer = new IntersectionObserver(function (entries) {
         const { isIntersecting } = entries[0];
         if (isIntersecting) {
-          console.log('si');
           setShow(true);
           observer.disconnect();
         }
@@ -26,6 +34,17 @@ export const PhotoCard = ({ id, likes = 0, src = DEFAULT_IMAGE }) => {
       observer.observe(element.current);
     });
   }, [element]);
+
+  const Icon = liked ? MdFavorite : MdFavoriteBorder
+
+  const setLocalStorage = value => {
+    try {
+      localStorage.setItem(key, value)
+      setLiked(value)
+    } catch(e){
+      console.error(e)
+    }
+  }
 
   return (
     <Article ref={element}>
@@ -37,8 +56,8 @@ export const PhotoCard = ({ id, likes = 0, src = DEFAULT_IMAGE }) => {
             </ImgWrapper>
           </a>
 
-          <Button>
-            <MdFavoriteBorder size="32px" /> {likes} likes!
+          <Button onClick={() => setLocalStorage(!liked)}>
+            <Icon size="32px" /> {likes} likes!
           </Button>
         </>
       )}
