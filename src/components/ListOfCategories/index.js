@@ -2,26 +2,26 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Category } from '../Category';
 import { List, Item } from './styles';
 
-function useCategoriesData(){
+function useCategoriesData() {
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   useEffect(function () {
-    setLoading(true)
+    setLoading(true);
     window
       .fetch('https://petgram-api.guissmejia.vercel.app/categories')
       .then((res) => res.json())
       .then((response) => {
         setCategories(response);
-        setLoading(false)
+        setLoading(false);
       });
   }, []);
 
-  return { categories, loading }
+  return { categories, loading };
 }
 
-export const ListOfCategories = () => {
-  const { categories, loading } = useCategoriesData()
+const ListOfCategoriesComponent = () => {
+  const { categories, loading } = useCategoriesData();
   const [showFixed, setShowFixed] = useState(false);
 
   useEffect(
@@ -38,17 +38,17 @@ export const ListOfCategories = () => {
   );
 
   const renderList = (fixed) => (
-    <List fixed = {fixed}>
+    <List fixed={fixed}>
       {categories.map((category) => (
         <Item key={category.id}>
-          <Category {...category} path={`/pet/${category.id}`}/>
+          <Category {...category} path={`/pet/${category.id}`} />
         </Item>
       ))}
     </List>
   );
 
-  if(loading){
-    return 'Cargando...'
+  if (loading) {
+    return 'Cargando...';
   }
 
   return (
@@ -58,3 +58,5 @@ export const ListOfCategories = () => {
     </>
   );
 };
+
+export const ListOfCategories = React.memo(ListOfCategoriesComponent);
